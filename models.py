@@ -34,20 +34,23 @@ class NearEarthObject:
     """
     # TODO: How can you, and should you, change the arguments to this constructor?
     # If you make changes, be sure to update the comments in this file.
-    def __init__(self, **info):
+    def __init__(self, des, name=None, diameter=float('nan'), hazardous=False):
         """Create a new `NearEarthObject`.
 
-        :param info: A dictionary of excess keyword arguments supplied to the constructor.
+        des: primary designation (str)
+        name: name of object (str)
+        diameter: diameter of object in km (float)
+        hazardous: whether the object is hazardous or not (bool)
         """
         # TODO: Assign information from the arguments passed to the constructor
         # onto attributes named `designation`, `name`, `diameter`, and `hazardous`.
         # You should coerce these values to their appropriate data type and
         # handle any edge cases, such as a empty name being represented by `None`
         # and a missing diameter being represented by `float('nan')`.
-        self.designation = ''
-        self.name = None
-        self.diameter = float('nan')
-        self.hazardous = False
+        self.designation = des
+        self.name = name
+        self.diameter = float(diameter)
+        self.hazardous = hazardous
 
         # Create an empty initial collection of linked approaches.
         self.approaches = []
@@ -56,7 +59,7 @@ class NearEarthObject:
     def fullname(self):
         """Return a representation of the full name of this NEO."""
         # TODO: Use self.designation and self.name to build a fullname for this object.
-        return ''
+        return f'{self.designation} {self.name}'
 
     def __str__(self):
         """Return `str(self)`."""
@@ -132,3 +135,4 @@ class CloseApproach:
         """Return `repr(self)`, a computer-readable string representation of this object."""
         return (f"CloseApproach(time={self.time_str!r}, distance={self.distance:.2f}, "
                 f"velocity={self.velocity:.2f}, neo={self.neo!r})")
+    
