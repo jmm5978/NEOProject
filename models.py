@@ -34,10 +34,12 @@ class NearEarthObject:
     """
     # TODO: How can you, and should you, change the arguments to this constructor?
     # If you make changes, be sure to update the comments in this file.
-    def __init__(self, des, name=None, diameter=float('nan'), hazardous=False):
+    def __init__(self, pdes, name=None, diameter=float('nan'), hazardous=False):
         """Create a new `NearEarthObject`.
-
-        des: primary designation (str)
+        
+        important reminder: data imports from neos.csv
+        --------------------------------------------------------
+        pdes: primary designation (str)
         name: name of object (str)
         diameter: diameter of object in km (float)
         hazardous: whether the object is hazardous or not (bool)
@@ -47,7 +49,7 @@ class NearEarthObject:
         # You should coerce these values to their appropriate data type and
         # handle any edge cases, such as a empty name being represented by `None`
         # and a missing diameter being represented by `float('nan')`.
-        self.designation = des
+        self.designation = pdes
         self.name = name
         self.diameter = float(diameter)
         self.hazardous = hazardous
