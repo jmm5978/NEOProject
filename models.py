@@ -61,7 +61,7 @@ class NearEarthObject:
     def fullname(self):
         """Return a representation of the full name of this NEO."""
         # TODO: Use self.designation and self.name to build a fullname for this object.
-        return f'{self.designation} {self.name}'
+        return f'{self.designation} ({self.name})'
 
     def __str__(self):
         """Return `str(self)`."""
@@ -69,9 +69,9 @@ class NearEarthObject:
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
         if self.hazardous:
-            return f"NEO {self.fullname} has a diameter of{self.diameter:.2f} km and is hazardous."
+            return f"NEO {self.fullname} has a diameter of {self.diameter:.2f} km and is hazardous."
         else:
-            return f"NEO {self.fullname} has a diameter of{self.diameter:.2f} km and is not hazardous."
+            return f"NEO {self.fullname} has a diameter of {self.diameter:.2f} km and is not hazardous."
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
@@ -139,7 +139,10 @@ class CloseApproach:
         # TODO: Use this object's attributes to return a human-readable string representation.
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
-        return f"On {self.time_str}, {self.neo} approaches earth at a distance of {self.distance:.2f} au and a velocity of {self.velocity:.2f} km/s."
+        if self.neo:
+            return f"On {self.time_str}, {self.neo} approaches earth at a distance of {self.distance:.2f} au and a velocity of {self.velocity:.2f} km/s."
+        else:
+            return f"On {self.time_str}, {self._designation} approaches earth at a distance of {self.distance:.2f} au and a velocity of {self.velocity:.2f} km/s."
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
