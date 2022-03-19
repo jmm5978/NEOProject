@@ -49,19 +49,24 @@ class NearEarthObject:
         # You should coerce these values to their appropriate data type and
         # handle any edge cases, such as a empty name being represented by `None`
         # and a missing diameter being represented by `float('nan')`.
-        self.designation = pdes
-        self.name = name
-        self.diameter = float(diameter)
-        self.hazardous = hazardous
+        self.designation = str(pdes)
+        self.name = str(name)
+        self.hazardous = bool(hazardous)
+        try:
+            self.diameter = float(diameter)
+        except:
+            print('Invalid type entered for the diameter field.  Argument should be a float object.')
 
         # Create an empty initial collection of linked approaches.
         self.approaches = []
+        
 
     @property
     def fullname(self):
         """Return a representation of the full name of this NEO."""
         # TODO: Use self.designation and self.name to build a fullname for this object.
         return f'{self.designation} ({self.name})'
+
 
     def __str__(self):
         """Return `str(self)`."""
@@ -73,10 +78,12 @@ class NearEarthObject:
         else:
             return f"NEO {self.fullname} has a diameter of {self.diameter:.2f} km and is not hazardous."
 
+
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
         return (f"NearEarthObject(designation={self.designation!r}, name={self.name!r}, "
                 f"diameter={self.diameter:.3f}, hazardous={self.hazardous!r})")
+
 
 
 class CloseApproach:
@@ -100,7 +107,7 @@ class CloseApproach:
         important reminder: data imports from cad.json
         ----------------------------------------------
         des: primary designation (str)
-        cd: time of close-approach
+        cd: time of close-approach (datetime)
         dist: approach distance in au (float)
         v_rel: velocity in km/s (float)
         """
@@ -108,13 +115,17 @@ class CloseApproach:
         # onto attributes named `_designation`, `time`, `distance`, and `velocity`.
         # You should coerce these values to their appropriate data type and handle any edge cases.
         # The `cd_to_datetime` function will be useful.
-        self._designation = des
+        self._designation = str(des)
         self.time = cd_to_datetime(cd)  # TODO: Use the cd_to_datetime function for this attribute.
-        self.distance = dist
-        self.velocity = v_rel
+        try:
+            self.distance = float(dist)
+            self.velocity = float(v_rel)
+        except:
+            print('Invalid types entered for the dist and/or v_rel fields.  Arguments should be float objects.')
 
         # Create an attribute for the referenced NEO, originally None.
         self.neo = None
+
 
     @property
     def time_str(self):
@@ -134,6 +145,7 @@ class CloseApproach:
         # TODO: Use self.designation and self.name to build a fullname for this object.
         return datetime_to_str(self.time)
 
+
     def __str__(self):
         """Return `str(self)`."""
         # TODO: Use this object's attributes to return a human-readable string representation.
@@ -144,8 +156,8 @@ class CloseApproach:
         else:
             return f"On {self.time_str}, {self._designation} approaches earth at a distance of {self.distance:.2f} au and a velocity of {self.velocity:.2f} km/s."
 
+
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
         return (f"CloseApproach(time={self.time_str!r}, distance={self.distance:.2f}, "
                 f"velocity={self.velocity:.2f}, neo={self.neo!r})")
-    
