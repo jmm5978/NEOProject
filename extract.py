@@ -1,42 +1,43 @@
-"""Extract data on near-Earth objects and close approaches from CSV and JSON files.
-
-The `load_neos` function extracts NEO data from a CSV file, formatted as
-described in the project instructions, into a collection of `NearEarthObject`s.
-
-The `load_approaches` function extracts close approach data from a JSON file,
-formatted as described in the project instructions, into a collection of
-`CloseApproach` objects.
-
-The main module calls these functions with the arguments provided at the command
-line, and uses the resulting collections to build an `NEODatabase`.
-
-You'll edit this file in Task 2.
-"""
+"""Extract data on near-Earth objects and close approaches from CSV and JSON files."""
 import csv
 import json
-
 from models import NearEarthObject, CloseApproach
 
 
-def load_neos(neo_csv_path):
-    """Read near-Earth object information from a CSV file.
 
-    :param neo_csv_path: A path to a CSV file containing data about near-Earth objects.
-    :return: A collection of `NearEarthObject`s.
+def load_neos(neo_csv_path):
+    """Read near-Earth object information from a CSV file, load it into a list, and return that list.
+    
+    ----------------------------------------------
+    neo_csv_path: a path to a CSV file containing data about near-Earth objects (str)
+    neo: a NEO object (NearEarthObject)
+
+    RETURN:
+    neos: a list of NEO objects (list)
     """
-    # TODO: Load NEO data from the given CSV file.
-    with open('neos.csv', 'r') as infile:
+    neos = []
+    with open(neo_csv_path, 'r') as infile:
         reader = csv.DictReader(infile)
-    return reader
+        for elem in reader:
+            neo = NearEarthObject(elem['pdes'], elem['name'], elem['diameter'], elem['pha'])
+            neos.append(neo)
+    return neos
 
 
 def load_approaches(cad_json_path):
-    """Read close approach data from a JSON file.
+    """Read close approach data from a JSON file, load it into a list, and return that list.
 
-    :param neo_csv_path: A path to a JSON file containing data about close approaches.
-    :return: A collection of `CloseApproach`es.
+    ----------------------------------------------
+    cad_json_path: a path to a JSON file containing data about close approaches (str)
+    approach: a CloseApproach object (CloseApproach)
+
+    RETURN:
+    approaches: a list of CloseApproach objects (list)
     """
-    # TODO: Load close approach data from the given JSON file.
-    with open('cad.json', 'r') as infile:
-        reader = json.load(infile)
-    return reader
+    approaches = []
+    with open(cad_json_path, 'r') as infile:
+        data = json.load(infile)
+        for record in data['data']:
+            approach = CloseApproach(record[0], record[3], record[4], record[7])
+            approaches.append(approach)
+    return approaches
