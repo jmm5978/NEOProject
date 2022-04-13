@@ -1,5 +1,6 @@
 """A database encapsulating collections of near-Earth objects and their close approaches."""
 from extract import load_neos, load_approaches
+from filters import DateFilter, DistanceFilter, VelocityFilter, DiameterFilter, HazardousFilter
 
 
 
@@ -49,7 +50,8 @@ class NEODatabase:
         self._neos_by_designation[neo.designation].approaches (list of approaches of NEO)
         """
         for approach in self._approaches:
-            neo = approach._designation
+            designation = approach._designation
+            neo = self._neos_by_designation[designation]
             approach.neo = neo
             self._neos_by_designation[neo].approaches.append(approach)
         
@@ -87,31 +89,26 @@ class NEODatabase:
         return None
 
 
-    def query(self, filters=()):
+    def query(self, filters=[]):
         """Query close approaches to generate those that match a collection of filters.
         If no arguments are provided, generate all known close approaches.
 
         ----------------------------------------------
-        filters: a collection of filters (tuple)
+        filters: a collection of filters (list)
         (date, start_date, end_date, distance_min, distance_max, velocity_min, velocity_max, diameter_min, diameter_max, hazardous)
 
-        RETURN:
+        Yield:
         a stream of matching CloseApproach objects (CloseApproach)
         """
         for approach in self._approaches:
-            if (filters[0:3] == (None, None, None)) or (approach.time.date() == filters[0]) or (filters[1] <= approach.time.date() <= filters[2]):
-                if (filters[3:5] == (None, None)) or (filters[3] <= approach.distance <= filters[4]):
-                    if (filters[5:7] == (None, None)) or (filters[5] <= approach.velocity <= filters[6]):
-                        if (filters[7:9] == (None, None)) or (filters[7] <= approach.neo.diameter <= filters[8]):
-                            if (filters[9] == None) or (filters[9] == approach.neo.hazardous):
-                                yield approach
-                            else:
-                                continue
-                        else:
-                            continue
-                    else:
-                        continue
-                else:
-                    continue
-            else:
-                continue
+            if filters[0] == DateFilter(operator.eq, approach[0]):
+                if filters[1] == DateFilter(operator.ge, approach[1]):
+                    if filters[2] == DateFilter(operator.le, approach[2]):
+                        if filters[3] == DistanceFilter(operator.ge, approach[3]):
+                            if filters[4] == DistanceFilter(operator.le, approach[4]):
+                                if filters[5] == VelocityFilter(operator.ge, approach[5]):
+                                    if filters[6] == VelocityFilter(operator.le, approach[6]):
+                                        if filters[7] == DiameterFilter(operator.ge, approach[7]):
+                                            if filters[8] == DiameterFilter(operator.le, approach[8]):
+                                                if filters[9] == HazardousFilter(operator.eq, approach[9]):
+                                                    yield approach
